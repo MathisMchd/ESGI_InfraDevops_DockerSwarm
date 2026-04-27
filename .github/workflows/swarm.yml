@@ -51,20 +51,23 @@ jobs:
         with:
           authkey: ${{ secrets.TS_AUTH_KEY }}
 
-      - name: TailScale status 
+      - name: Tailscale status
         run: tailscale status
 
-        
       - name: Deploy on VM
         run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+
           tailscale ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_HOST }} << EOF
-            OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            sudo docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            sudo docker pull ghcr.io/$OWNER/myapp:latest
             
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/$OWNER/myapp:latest
+            sudo docker stop myapp || true
+            sudo docker rm myapp || true
             
-            docker stop myapp || true
-            docker rm myapp || true
-            
-            docker run -d --name myapp -p 80:80 ghcr.io/$OWNER/myapp:latest
+            sudo docker run -d \
+              --name myapp \
+              -p 80:80 \
+              --restart unless-stopped \
+              ghcr.io/$OWNER/myapp:latest
           EOF
