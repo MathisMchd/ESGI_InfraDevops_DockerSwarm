@@ -55,7 +55,7 @@ jobs:
       # 2. SSH via le réseau Tailscale
       - name: Deploy on VM
         run: |
-          tailscale ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_HOST }} << 'EOF'
+          tailscale ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_IP }} << 'EOF'
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             docker pull ghcr.io/${{ github.repository_owner }}/myapp:latest
             docker stop myapp || true
