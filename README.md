@@ -1,7 +1,8 @@
 # Infra DevOps - Docker Swarm
 ### Mathis MICHENAUD - ESGI IW Nantes - 2026 
 
-
+# Status
+[![Build & Push GHCR](https://github.com/MathisMchd/ESGI_InfraDevops_DockerSwarm/actions/workflows/main.yml/badge.svg)](https://github.com/MathisMchd/ESGI_InfraDevops_DockerSwarm/actions/workflows/main.yml)
 
 
 ## Comment récupérer le hostname dans Node.js ?
