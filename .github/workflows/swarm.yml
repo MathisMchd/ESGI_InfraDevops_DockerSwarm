@@ -45,16 +45,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
-  
     steps:
       - name: Setup Tailscale
         run: |
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up --authkey=${{ secrets.TS_AUTH_KEY }} --hostname=github-runner
-          
+
       - name: Deploy via Tailscale SSH
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_IP }} << 'EOF'
+          tailscale ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_HOST }} << 'EOF'
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             docker pull ghcr.io/${{ github.repository_owner }}/myapp:latest
             docker stop myapp || true
