@@ -51,6 +51,10 @@ jobs:
         with:
           authkey: ${{ secrets.TS_AUTH_KEY }}
 
+      - name: TailScale status 
+        run: tailscale status
+
+        
       - name: Deploy on VM
         run: |
           tailscale ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_HOST }} << EOF
